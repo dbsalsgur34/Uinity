@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class HeadControl : MonoBehaviour {
 
-    public Vector3 LookDirection;
-
+    //공개 항목
     public float Maxspeed;
     public float Accel;
-
     public float speed;
-
-    public float xx;
-    public float yy;
-
-    public Vector2 towardvector;
     public Rigidbody2D Target;
+    public List<GameObject> SheepList;
 
+    //비공개 항목
+    float xx;
+    float yy;
+    Vector3 LookDirection;
+    Vector2 towardvector;
+    
     private void Start()
     {
         Target = this.GetComponent<Rigidbody2D>();
