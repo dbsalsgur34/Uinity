@@ -13,7 +13,6 @@ public class HeadControl : MonoBehaviour {
 
     //비공개 항목
     float xx;
-    float yy;
     Vector3 LookDirection;
     Vector2 towardvector;
     
@@ -25,7 +24,6 @@ public class HeadControl : MonoBehaviour {
     void KeyboardInput()
     {
         xx = Input.GetAxisRaw("Horizontal");
-        yy = Input.GetAxisRaw("Vertical");
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -53,6 +51,23 @@ public class HeadControl : MonoBehaviour {
         Quaternion R = Quaternion.LookRotation(LookDirection);
         transform.rotation = R;
     }
+
+    public void AddSheepList(GameObject Sheep)
+    {
+        SheepList.Add(Sheep);
+    }
+
+    public void ChangeMaster(GameObject Sheep, GameObject target)
+    {
+        int index = SheepList.IndexOf(Sheep);
+
+        for (int temp = index ; temp <= SheepList.Count - 1; temp++)
+        {
+            SheepList[temp].GetComponent<SheepControl>().Master = target;
+            target.GetComponent<HeadControl>().SheepList.Add(this.SheepList[temp]);
+        }
+        SheepList.RemoveRange(index, SheepList.Count - index);
+    } 
 
     private void FixedUpdate()
     {

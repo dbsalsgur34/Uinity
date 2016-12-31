@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,8 +22,8 @@ public class SheepControl : MonoBehaviour
     public SheepState SS;
 
     //비공개 항목
-    public Vector3 lastLeaderPosition;
-    public List<Vector3> positions;
+    Vector3 lastLeaderPosition;
+    List<Vector3> positions;
     
     // Use this for initialization
 
@@ -72,22 +73,30 @@ public class SheepControl : MonoBehaviour
     {
         if (SS == SheepState.NOOWNER)
         {
-            this.Master = target.gameObject;
-            if (Master.GetComponent<HeadControl>().SheepList.Count == 0)
-            {
-                this.leader = this.Master;
-            }
-            else
-            {
-                this.leader = Master.GetComponent<HeadControl>().SheepList[Master.GetComponent<HeadControl>().SheepList.Count - 1];
-            }
+            this.Master = target;
+            ChangeLeader(target);
             SS = SheepState.HAVEOWNER;
-            Master.GetComponent<HeadControl>().SheepList.Add(this.gameObject);
+            Master.GetComponent<HeadControl>().AddSheepList(this.gameObject);
             positions.Add(leader.transform.position);
         }
         else
         {
-            
+            ChangeLeader(target);
+            Master.GetComponent<HeadControl>().ChangeMaster(this.gameObject, target);
+            positions.Clear();
+            positions.Add(leader.transform.position);
+        }
+    }
+
+    void ChangeLeader(GameObject target)
+    {
+        if (target.GetComponent<HeadControl>().SheepList.Count == 0)
+        {
+            this.leader = target;
+        }
+        else
+        {
+            this.leader = target.GetComponent<HeadControl>().SheepList[target.GetComponent<HeadControl>().SheepList.Count - 1];
         }
     }
 
@@ -98,4 +107,3 @@ public class SheepControl : MonoBehaviour
     }
 
 }
-
